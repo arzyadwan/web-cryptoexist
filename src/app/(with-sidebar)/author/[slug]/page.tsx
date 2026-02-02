@@ -1,92 +1,122 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { notFound } from 'next/navigation'
-import { client } from '@/lib/sanity'
-import { urlFor } from '@/lib/urlFor'
-import { Post, Author } from '@/types/sanity'
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { client } from "@/lib/sanity";
+import { urlFor } from "@/lib/urlFor";
+import { Post } from "@/types/sanity";
+import NewsCard from "@/app/components/NewsCard";
 
-interface AuthorWithPosts extends Author {
-  posts: Post[]
+export const revalidate = 60;
+
+interface AuthorData {
+  name: string;
+  image: any;
+  bio: any;
+  slug: { current: string };
+  posts: Post[];
 }
 
-export const revalidate = 60
-
+// 1. Generate Static Params (Agar halaman author dirender saat build)
 export async function generateStaticParams() {
-  const query = `*[_type == "author"]{ "slug": slug.current }`
-  const authors = await client.fetch(query)
-  return authors.map((author: { slug: string }) => ({ slug: author.slug }))
+  const query = `*[_type == "author"]{ "slug": slug.current }`;
+  const authors = await client.fetch(query);
+
+  return authors.map((author: { slug: string }) => ({
+    slug: author.slug,
+  }));
 }
 
-async function getAuthorData(slug: string): Promise<AuthorWithPosts | null> {
+// 2. Fetch Data Author
+async function getAuthorData(slug: string): Promise<AuthorData | null> {
   const query = `*[_type == "author" && slug.current == $slug][0] {
     name,
     image,
     bio,
+    slug,
     "posts": *[_type == "post" && references(^._id)] | order(publishedAt desc) {
       _id,
       title,
       slug,
+      excerpt,
       publishedAt,
-      mainImage
+      mainImage,
+      "author": author->{name},
+      "categories": categories[]->{title, slug}
     }
-  }`
-  return client.fetch(query, { slug })
+  }`;
+
+  // PERBAIKAN UTAMA ADA DI SINI:
+  // Kita harus mengirim object { slug } sebagai parameter kedua
+  return client.fetch(query, { slug }); 
 }
 
-export default async function AuthorPage({ params }: { params: { slug: string } }) {
-  const author = await getAuthorData(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const author = await getAuthorData(slug);
+  
+  if (!author) return { title: 'Author Not Found' };
+  
+  return {
+    title: `Artikel oleh ${author.name}`,
+    description: `Daftar artikel dan berita terbaru yang ditulis oleh ${author.name}.`,
+  };
+}
 
-  if (!author) notFound()
+export default async function AuthorPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = await getAuthorData(slug);
+
+  if (!data) notFound();
 
   return (
-    <main className="container mx-auto px-4 py-12">
-      {/* Profile Card */}
-      <div className="bg-white border rounded-2xl p-8 mb-12 flex flex-col md:flex-row items-center gap-8 shadow-sm">
-        <div className="relative w-32 h-32 flex-shrink-0">
-          {author.image ? (
-            <Image
-              src={urlFor(author.image).url()}
-              alt={author.name}
-              fill
-              className="object-cover rounded-full border-4 border-gray-100"
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-4xl">
-              👤
-            </div>
-          )}
+    <div>
+      {/* Header Author */}
+      <div className="mb-12 text-center border-b border-gray-100 pb-12">
+        <div className="relative w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden border-2 border-gray-100 shadow-sm">
+            {data.image ? (
+                <Image 
+                    src={urlFor(data.image).url()} 
+                    alt={data.name} 
+                    fill 
+                    className="object-cover"
+                />
+            ) : (
+                <div className="w-full h-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-3xl">
+                    {data.name.charAt(0)}
+                </div>
+            )}
         </div>
-        <div className="text-center md:text-left">
-          <h1 className="text-3xl font-bold mb-2">{author.name}</h1>
-          <p className="text-gray-600 max-w-2xl">{author.bio || "Jurnalis dan kontributor konten crypto."}</p>
-        </div>
+        
+        <span className="text-blue-600 font-bold tracking-wider text-xs uppercase bg-blue-50 px-3 py-1 rounded-full">
+            Author Profile
+        </span>
+        <h1 className="text-4xl font-black mt-4 mb-4 text-slate-900">
+            {data.name}
+        </h1>
+        {/* Render bio jika perlu, atau gunakan text statis jika bio belum ready */}
+        <p className="text-gray-500 max-w-xl mx-auto">
+           Jurnalis dan kontributor konten di CryptoMedia.
+        </p>
       </div>
 
-      {/* Artikel Mereka */}
-      <h2 className="text-2xl font-bold mb-6 border-b pb-4">Artikel oleh {author.name}</h2>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {author.posts.map((post) => (
-          <Link key={post._id} href={`/news/${post.slug.current}`} className="group">
-            <div className="relative h-40 mb-3 rounded-lg overflow-hidden bg-gray-100">
-               {post.mainImage && (
-                  <Image
-                    src={urlFor(post.mainImage).url()}
-                    alt={post.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform"
-                  />
-               )}
+      {/* Grid Artikel Author */}
+      <div>
+        <h3 className="text-xl font-bold mb-6 border-l-4 border-black pl-3">
+            Artikel Terbaru
+        </h3>
+        
+        {data.posts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {data.posts.map((post) => (
+                <NewsCard key={post._id} post={post} />
+            ))}
             </div>
-            <h3 className="font-bold text-gray-900 group-hover:text-blue-600 leading-snug">
-              {post.title}
-            </h3>
-            <p className="text-xs text-gray-500 mt-1">
-              {new Date(post.publishedAt).toLocaleDateString()}
-            </p>
-          </Link>
-        ))}
+        ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+            <p className="text-gray-500">Author ini belum mempublikasikan artikel.</p>
+            </div>
+        )}
       </div>
-    </main>
-  )
+    </div>
+  );
 }
