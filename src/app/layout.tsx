@@ -4,7 +4,8 @@ import "./globals.css";
 import Navbar from "./components/Navbar"; // Import Navbar
 import Footer from "./components/Footer";
 import CategoryTabs from "./components/ui/CategoryTabs";
-import MarketMarquee from './components/MarketMarquee' // <--- 1. Import Ini
+import MarketMarquee from "./components/MarketMarquee"; // <--- 1. Import Ini
+import AdSpace from "./components/AdSpace"; // <--- Import Komponen AdSpace
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,9 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body>
+        <div className="w-full bg-gray-50 border-b border-gray-200">
+           <AdSpace position="top-billboard" showPlaceholder={false} />
+        </div>
         <Navbar />
         <MarketMarquee />
         {children} {/* Render konten dari route groups */}

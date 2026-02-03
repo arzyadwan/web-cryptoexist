@@ -4,6 +4,7 @@ import SidebarMarketMini from './SidebarMarketMini'
 import SidebarNewsletter from './SidebarNewsLetter'
 import TagChip from './ui/TagChip' // Pastikan sudah ada komponen TagChip
 import SidebarAd from './SidebarAd' // <--- 1. Import Widget Iklan
+import AdSpace from './AdSpace' // <--- 2. Import Komponen AdSpace
 
 interface Props {
   trendingPosts: Post[]
@@ -23,6 +24,7 @@ export default function GlobalSidebar({ trendingPosts, editorsPick, tags }: Prop
 
       {/* 🔴 PRIORITAS 1: Newsletter (Asset) */}
       <SidebarNewsletter />
+      <AdSpace position="sidebar" showPlaceholder={true} />
       <SidebarAd />
 
       {/* 🟡 PRIORITAS 2: Tags (Discovery) */}
