@@ -1,99 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Bell } from "lucide-react";
 import SearchAutocomplete from "./SearchAutoComplete";
 import Image from "next/image";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileNewsOpen, setIsMobileNewsOpen] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
+  // Efek scroll untuk navbar yang lebih dinamis
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navigation = [
-    { name: "Home", href: "/", type: "link" },
     {
-      name: "News",
+      name: "Intelligence",
       href: "/news",
       type: "dropdown",
       children: [
-        { name: "Latest News", href: "/news" },
+        { name: "Latest Pulse", href: "/news" },
         { name: "Bitcoin", href: "/category/bitcoin" },
         { name: "Ethereum", href: "/category/ethereum" },
-        { name: "Altcoins", href: "/category/altcoins" },
-        { name: "DeFi & Web3", href: "/category/defi-web3" },
-        { name: "Regulation", href: "/category/regulation" },
         { name: "Market Analysis", href: "/category/market-analysis" },
+        { name: "Regulation", href: "/category/regulation" },
       ],
     },
-    { name: "Event", href: "/events", type: "link" },
-    { name: "About", href: "/about", type: "link" },
-    { name: "Contact", href: "/contact", type: "link" },
+    { name: "Events", href: "/events", type: "link" },
+    { name: "Market", href: "/market", type: "link" },
+    { name: "Crypto Exist", href: "/about", type: "link" },
   ];
 
   const isActive = (path: string) => pathname === path;
-  const isParentActive = (children: { href: string }[]) =>
-    children?.some((c) => c.href === pathname);
 
   return (
-    <header className="sticky top-0 z-100 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        
-        {/* === LOGO SECTION === */}
-        <div className="flex-shrink-0 flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            {/* Hardcode Image Logo */}
-            <div className="relative w-40 h-10">
-              <Image 
-                src="/logo.png" // Pastikan file logo.png ada di folder public
-                alt="CryptoMedia Logo"
-                fill
-                className="object-contain object-left"
-                priority
-              />
+    <header
+      className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md border-b-1 border-gray-200 h-16"
+          : "bg-white h-20 border-b-2 border-zinc-900"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+        {/* === LOGO: High Contrast === */}
+        <div className="flex-shrink-0">
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="bg-yellow-400 p-1.5 rounded-lg ">
+              <div className="relative w-8 h-8">
+                <Image
+                  src="/icon.png"
+                  alt="Logo Icon"
+                  fill
+                  className="object-contain "
+                />
+              </div>
             </div>
+            <span className="text-xl font-[1000] uppercase tracking-tighter text-black hidden lg:block">
+              CRYPTO<span className="text-yellow-500"> EXIST</span>
+            </span>
           </Link>
         </div>
 
-        {/* === DESKTOP NAV === */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* === DESKTOP NAV: Technical Style === */}
+        <nav className="hidden md:flex items-center gap-2">
           {navigation.map((item) => {
             const active =
               isActive(item.href) ||
-              (item.children && isParentActive(item.children));
+              item.children?.some((c) => isActive(c.href));
 
             if (item.type === "dropdown") {
               return (
                 <div
                   key={item.name}
-                  className="relative group h-16 flex items-center px-3"
+                  className="relative group flex items-center h-full"
                 >
                   <button
-                    className={`flex items-center gap-1 text-sm font-semibold transition-colors ${
+                    className={`flex items-center gap-1.5 px-4 py-2 text-[11px] font-[900] uppercase tracking-widest transition-all rounded-lg ${
                       active
-                        ? "text-blue-600"
-                        : "text-gray-600 hover:text-blue-600"
+                        ? "bg-zinc-900 text-yellow-400"
+                        : "text-zinc-500 hover:bg-zinc-100 hover:text-black"
                     }`}
                   >
                     {item.name}
                     <ChevronDown
                       size={14}
-                      className="group-hover:rotate-180 transition-transform duration-300"
+                      className="group-hover:rotate-180 transition-transform duration-500"
                     />
                   </button>
 
-                  {/* Dropdown Content */}
-                  <div className="absolute top-[calc(100%-4px)] left-0 w-56 bg-white border border-gray-100 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-2">
+                  <div className="absolute top-full left-0 w-64 bg-zinc-900 border-2 border-black rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-2 p-3 overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-yellow-400"></div>
                     {item.children?.map((child) => (
                       <Link
                         key={child.name}
                         href={child.href}
-                        className={`block px-4 py-2.5 text-sm rounded-xl transition-colors ${
+                        className={`block px-4 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${
                           isActive(child.href)
-                            ? "bg-blue-50 text-blue-600 font-bold"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-blue-600"
+                            ? "bg-white/10 text-yellow-400"
+                            : "text-zinc-400 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         {child.name}
@@ -108,10 +118,10 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`px-4 py-2 text-sm font-semibold transition-colors rounded-full ${
+                className={`px-4 py-2 text-[11px] font-[900] uppercase tracking-widest transition-all rounded-lg ${
                   active
-                    ? "text-blue-600 bg-blue-50/50"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    ? "bg-zinc-900 text-yellow-400"
+                    : "text-zinc-500 hover:bg-zinc-100 hover:text-black"
                 }`}
               >
                 {item.name}
@@ -120,91 +130,48 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* === SEARCH & CTA (Desktop) === */}
-        <div className="hidden md:flex items-center gap-4">
-          <div className="w-56">
+        {/* === TOOLS: Pro Terminal Style === */}
+        <div className="hidden md:flex items-center gap-6">
+          <div className="w-48 xl:w-64 scale-90 origin-right">
             <SearchAutocomplete />
           </div>
-          <button className="bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-blue-600 transition-colors shadow-sm">
-            Subscribe
-          </button>
+
+          <div className="flex items-center gap-3 border-l border-zinc-200 pl-6">
+            <Link href="/contact">
+              <button className="bg-black text-yellow-400 px-6 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-yellow-400 hover:text-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] hover:shadow-none active:translate-y-1">
+                Contact Us
+              </button>
+            </Link>
+          </div>
         </div>
 
-        {/* === MOBILE MENU BUTTON === */}
+        {/* === MOBILE TOGGLE === */}
         <button
-          className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+          className="md:hidden p-2 bg-zinc-100 rounded-xl"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* === MOBILE MENU OVERLAY === */}
+      {/* Mobile Menu Overlay - Menggunakan Tema Gelap agar kontras */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-16 bg-white border-t border-gray-100 h-[calc(100vh-64px)] overflow-y-auto animate-in slide-in-from-top duration-300">
-          <div className="p-6 space-y-4">
-            {navigation.map((item) => {
-              if (item.type === "dropdown") {
-                return (
-                  <div key={item.name} className="space-y-2">
-                    <button
-                      onClick={() => setIsMobileNewsOpen(!isMobileNewsOpen)}
-                      className="flex items-center justify-between w-full py-2 text-xl font-bold text-gray-900"
-                    >
-                      {item.name}
-                      <ChevronDown
-                        size={20}
-                        className={`transition-transform duration-300 ${
-                          isMobileNewsOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {isMobileNewsOpen && (
-                      <div className="grid grid-cols-1 gap-1 pl-4 border-l-2 border-gray-100">
-                        {item.children?.map((child) => (
-                          <Link
-                            key={child.name}
-                            href={child.href}
-                            className={`py-2 text-base ${
-                              isActive(child.href)
-                                ? "text-blue-600 font-bold"
-                                : "text-gray-500"
-                            }`}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {child.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`block py-2 text-xl font-bold ${
-                    isActive(item.href) ? "text-blue-600" : "text-gray-900"
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-            
-            <div className="w-full pt-4">
-              <SearchAutocomplete />
-            </div>
-            
-            <div className="pt-2">
-              <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-100">
-                Get Started
-              </button>
-            </div>
+        <div className="md:hidden fixed inset-x-0 top-[64px] bg-zinc-900 h-screen z-50 p-6 animate-in slide-in-from-right duration-500">
+          <div className="space-y-6">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="block text-3xl font-[1000] text-white uppercase tracking-tighter"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <hr className="border-white/10" />
+            <button className="w-full bg-yellow-400 text-black py-5 rounded-2xl font-black uppercase tracking-[0.2em]">
+              Join Dispatch
+            </button>
           </div>
         </div>
       )}

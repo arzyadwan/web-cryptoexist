@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/lib/urlFor'
 import { Post } from '@/types/sanity'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Zap } from 'lucide-react'
 
 interface Props {
   title: string
@@ -13,75 +13,95 @@ interface Props {
 export default function CategorySection({ title, categorySlug, posts }: Props) {
   if (!posts || posts.length === 0) return null
 
+  // Logika warna dinamis berdasarkan slug untuk branding yang kuat
+  const isBitcoin = categorySlug.toLowerCase().includes('bitcoin');
+  const accentColor = isBitcoin ? 'bg-[#F7931A]' : 'bg-blue-600';
+  const textColor = isBitcoin ? 'group-hover:text-[#F7931A]' : 'group-hover:text-blue-600';
+
   return (
-    <section className="py-8 border-t border-gray-100">
-      {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-3 h-8 bg-blue-600"></div> {/* Warna beda dikit biar fresh */}
-          <h2 className="text-2xl font-black text-black uppercase tracking-tight">
-            {title}
-          </h2>
+    <section className="py-12 border-t border-zinc-100">
+      {/* 1. Enhanced Header Section */}
+      <div className="flex items-end justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <div className={`p-2 rounded-lg ${accentColor} text-white shadow-lg shadow-current/20`}>
+            <Zap size={20} fill="currentColor" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-zinc-900 uppercase tracking-tighter leading-none">
+              {title}
+            </h2>
+            <div className="flex items-center gap-2 mt-1">
+               <span className="w-2 h-2 rounded-full animate-pulse bg-emerald-500"></span>
+               <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Market Pulse</p>
+            </div>
+          </div>
         </div>
+        
         <Link 
-            href={`/category/${categorySlug}`}
-            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-600 transition-colors"
+          href={`/category/${categorySlug}`}
+          className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-zinc-400 hover:text-black transition-all"
         >
-            Lihat Semua <ArrowRight size={16} />
+          View Intelligence <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
-      {/* Horizontal Slider Container */}
-      {/* 'overflow-x-auto' membuat scroll ke samping */}
-      {/* 'snap-x' membuat scroll berhenti pas di kartu (snapping) */}
-      <div className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-        
-        {posts.map((post) => (
-          <div 
-            key={post._id} 
-            className="flex-shrink-0 w-[280px] snap-center group"
-          >
-            <Link href={`/news/${post.slug.current}`} className="block h-full">
-                <div className="relative h-40 w-full rounded-xl overflow-hidden mb-3 bg-gray-100 shadow-sm border border-gray-100">
-                    {post.mainImage ? (
-                        <Image 
-                            src={urlFor(post.mainImage).url()} 
-                            alt={post.title} 
-                            fill 
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs font-bold">NO IMAGE</div>
-                    )}
+      {/* 2. Horizontal Slider with Hidden Scrollbar */}
+      <div className="relative group/container">
+        <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+          
+          {posts.map((post) => (
+            <div 
+              key={post._id} 
+              className="flex-shrink-0 w-[300px] snap-start group"
+            >
+              <Link href={`/news/${post.slug.current}`} className="block">
+                {/* Image Card with Elevation Effect */}
+                <div className="relative h-44 w-full rounded-2xl overflow-hidden mb-4 bg-zinc-100 ring-1 ring-zinc-200/50 group-hover:ring-zinc-900 transition-all duration-500">
+                  {post.mainImage ? (
+                    <Image 
+                      src={urlFor(post.mainImage).url()} 
+                      alt={post.title} 
+                      fill 
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-zinc-50 text-zinc-300 font-black italic text-xs">OFFLINE</div>
+                  )}
+                  
+                  {/* Subtle Time Badge */}
+                  <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-[9px] font-bold text-white px-2 py-1 rounded-md uppercase tracking-widest">
+                    {new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short'})}
+                  </div>
                 </div>
                 
-                <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">
-                        {new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short'})}
-                    </span>
-                    <h3 className="font-bold text-gray-900 leading-snug group-hover:text-blue-600 line-clamp-2">
-                        {post.title}
-                    </h3>
+                <div className="space-y-2">
+                  <h3 className={`font-black text-lg text-zinc-900 leading-[1.2] transition-colors duration-300 line-clamp-2 ${textColor}`}>
+                    {post.title}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                     <div className={`h-1 w-8 rounded-full ${accentColor} opacity-30 group-hover:opacity-100 transition-all group-hover:w-16`}></div>
+                  </div>
                 </div>
+              </Link>
+            </div>
+          ))}
+
+          {/* 3. The "End of Deck" Card */}
+          <div className="flex-shrink-0 w-[200px] snap-start">
+            <Link 
+              href={`/category/${categorySlug}`}
+              className="flex flex-col items-center justify-center h-44 border-2 border-dashed border-zinc-200 rounded-2xl group hover:border-zinc-900 transition-all duration-300 gap-4"
+            >
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-zinc-100 group-hover:${accentColor} group-hover:text-white transition-all duration-500`}>
+                <ArrowRight size={24} />
+              </div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-hover:text-zinc-900">
+                Explore More
+              </p>
             </Link>
           </div>
-        ))}
 
-        {/* Card Terakhir: "Lihat Lainnya" Button */}
-        <div className="flex-shrink-0 w-[150px] snap-center flex items-center justify-center">
-            <Link 
-                href={`/category/${categorySlug}`}
-                className="flex flex-col items-center gap-2 group p-4 text-center"
-            >
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <ArrowRight size={20} />
-                </div>
-                <span className="text-xs font-bold text-gray-500 group-hover:text-blue-600">
-                    Berita {title} Lainnya
-                </span>
-            </Link>
         </div>
-
       </div>
     </section>
   )

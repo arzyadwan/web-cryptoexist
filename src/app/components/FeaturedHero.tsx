@@ -2,45 +2,69 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/lib/urlFor'
 import { Post } from '@/types/sanity'
+import { ArrowRight, Flame } from 'lucide-react'
 
 export default function FeaturedHero({ post }: { post: Post }) {
   if (!post) return null
 
   return (
-    <div className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-sm group">
+    <div className="relative w-full h-[400px] md:h-[480px] rounded-3xl overflow-hidden group border border-zinc-200 shadow-xl bg-black">
+      {/* 1. Optimized Image - Overlay lebih terkontrol */}
       {post.mainImage && (
-        <Image
-          src={urlFor(post.mainImage).url()}
-          alt={post.title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-700"
-          priority
-        />
+        <div className="absolute inset-0 md:w-2/3 md:left-auto">
+          <Image
+            src={urlFor(post.mainImage).url()}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Fade effect untuk transisi ke area teks hitam di sebelah kiri pada desktop */}
+          <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black via-black/60 md:via-black/20 to-transparent"></div>
+        </div>
       )}
       
-      {/* Gradient Overlay lebih tinggi agar teks terbaca */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+      {/* 2. Content Area - Lebih Fokus & Ramping */}
+      <div className="absolute inset-0 flex flex-col justify-end md:justify-center p-6 md:p-12 md:w-3/5">
+        <div className="space-y-4">
+          
+          {/* Small Badge */}
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1.5 bg-yellow-400 text-black text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-widest">
+              <Flame size={12} fill="black" /> Breaking
+            </span>
+            <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+              Market Alert
+            </span>
+          </div>
+          
+          {/* Headline - Ukuran dikurangi (text-3xl ke 4xl) */}
+          <h1 className="text-2xl md:text-4xl font-black text-white leading-tight tracking-tight">
+            <Link href={`/news/${post.slug.current}`} className="hover:text-yellow-400 transition-colors">
+              {post.title}
+            </Link>
+          </h1>
 
-      <div className="absolute bottom-0 left-0 p-6 md:p-12 max-w-4xl">
-        <span className="bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-sm uppercase tracking-wider mb-4 inline-block shadow-md">
-          Breaking News
-        </span>
-        
-        <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-3 drop-shadow-md">
-          <Link href={`/news/${post.slug.current}`} className="hover:text-yellow-300 transition decoration-yellow-400 underline-offset-4 hover:underline">
-            {post.title}
-          </Link>
-        </h1>
-
-        {/* TAMBAHAN: Excerpt Besar */}
-        <p className="hidden md:block text-gray-200 text-lg mb-6 line-clamp-2 max-w-2xl leading-relaxed">
+          {/* Excerpt - Lebih pendek (line-clamp-2) */}
+          <p className="hidden md:block text-zinc-400 text-sm md:text-base line-clamp-2 max-w-lg leading-relaxed font-medium">
             {post.excerpt}
-        </p>
+          </p>
 
-        <div className="flex items-center text-gray-300 text-sm gap-4">
-          <span className="font-bold text-white uppercase tracking-wider">{post.author?.name}</span>
-          <span>•</span>
-          <time>{new Date(post.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</time>
+          {/* Meta & Button */}
+          <div className="flex items-center gap-5 pt-2">
+            <Link 
+              href={`/news/${post.slug.current}`}
+              className="flex items-center gap-2 bg-white text-black text-[11px] font-black px-5 py-2.5 rounded-full hover:bg-yellow-400 transition-colors uppercase tracking-wider"
+            >
+              Read Report <ArrowRight size={14} />
+            </Link>
+            
+            <div className="flex items-center gap-2 text-zinc-500 text-[11px] font-bold">
+              <span className="w-1 h-1 rounded-full bg-zinc-700"></span>
+              <time>{new Date(post.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</time>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { urlFor } from '@/lib/urlFor'
-import { Calendar, MapPin, ExternalLink } from 'lucide-react'
+import { MapPin, ExternalLink, Clock } from 'lucide-react'
 
 interface EventProps {
   title: string
@@ -16,55 +15,75 @@ interface EventProps {
 export default function EventCard({ event }: { event: EventProps }) {
   const eventDate = new Date(event.date)
   
-  // Format Tanggal: "12"
   const day = eventDate.toLocaleDateString('id-ID', { day: 'numeric' })
-  // Format Bulan: "OKT"
   const month = eventDate.toLocaleDateString('id-ID', { month: 'short' }).toUpperCase()
 
   return (
-    <div className="flex flex-col md:flex-row bg-white border-2 border-black rounded-xl overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 mb-6">
+    <div className="group flex flex-col md:flex-row bg-white border-2 border-zinc-900 rounded-[2rem] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-300 mb-8">
       
-      {/* Bagian Kiri: Date Badge (Visual Tiket) */}
-      <div className="bg-yellow-400 md:w-32 p-4 flex flex-col items-center justify-center border-b-2 md:border-b-0 md:border-r-2 border-black text-center">
-        <span className="text-xl font-black text-black">{month}</span>
-        <span className="text-5xl font-black text-black">{day}</span>
-        <span className="text-xs font-bold uppercase mt-2 bg-black text-white px-2 py-1 rounded">
-          {eventDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
-        </span>
-      </div>
-
-      {/* Bagian Tengah: Info */}
-      <div className="flex-grow p-6 flex flex-col justify-center">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider border border-gray-300 px-2 py-0.5 rounded text-gray-500">
-            {event.eventType}
+      {/* 1. Date Badge: The Ticket Stub */}
+      <div className="bg-yellow-400 md:w-40 p-6 flex flex-col items-center justify-center border-b-2 md:border-b-0 md:border-r-2 border-zinc-900 text-center relative overflow-hidden">
+        {/* Decorative Perforation (Efek Sobekan Tiket) */}
+        <div className="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-zinc-900 rounded-full z-10"></div>
+        
+        <span className="text-xs font-[1000] uppercase tracking-[0.3em] text-black/40 mb-1">{month}</span>
+        <span className="text-6xl font-[1000] text-black leading-none tracking-tighter">{day}</span>
+        
+        <div className="mt-4 bg-black text-yellow-400 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-lg">
+          <Clock size={12} strokeWidth={3} />
+          <span className="text-[10px] font-black tracking-widest uppercase">
+            {eventDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>
-        <h3 className="text-2xl font-black text-gray-900 leading-tight mb-2">
+      </div>
+
+      {/* 2. Info Section: The Briefing */}
+      <div className="flex-grow p-8 flex flex-col justify-center">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="bg-zinc-100 text-zinc-900 text-[9px] font-[1000] uppercase tracking-[0.2em] px-3 py-1.5 rounded-md border border-zinc-200">
+            {event.eventType}
+          </span>
+          <div className="h-[1px] flex-grow bg-zinc-100"></div>
+        </div>
+
+        <h3 className="text-2xl md:text-3xl font-[1000] text-black leading-none tracking-tighter mb-4 group-hover:text-yellow-600 transition-colors uppercase italic">
           {event.title}
         </h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        
+        <p className="text-zinc-500 text-sm font-medium mb-6 line-clamp-2 leading-relaxed opacity-80">
           {event.description}
         </p>
-        <div className="flex items-center gap-4 text-sm font-medium text-gray-700">
-          <div className="flex items-center gap-1">
-             <MapPin size={16} className="text-blue-600"/>
+
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center gap-2 text-[11px] font-black text-zinc-900 uppercase tracking-widest">
+             <MapPin size={16} className="text-yellow-600" strokeWidth={3} />
              {event.location}
+          </div>
+          <div className="h-4 w-[1px] bg-zinc-200 hidden sm:block"></div>
+          <div className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">
+            RSVP OPEN
           </div>
         </div>
       </div>
 
-      {/* Bagian Kanan: Image & Button */}
-      <div className="md:w-64 bg-gray-50 border-t-2 md:border-t-0 md:border-l-2 border-black p-4 flex flex-col justify-between items-center gap-4">
-        {event.coverImage && (
-           <div className="relative w-full h-24 rounded border border-black overflow-hidden">
+      {/* 3. Action Section: The Boarding Pass */}
+      <div className="md:w-72 bg-zinc-50 border-t-2 md:border-t-0 md:border-l-2 border-zinc-900 p-6 flex flex-col justify-between items-center gap-6 relative">
+        {/* Decorative Circle (Efek Sobekan Tiket Sebelah Kanan) */}
+        <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-zinc-900 rounded-full z-10"></div>
+
+        {event.coverImage ? (
+           <div className="relative w-full aspect-video rounded-2xl border-2 border-zinc-200 overflow-hidden shadow-sm group-hover:border-zinc-900 transition-colors">
              <Image 
                 src={urlFor(event.coverImage).url()} 
                 alt={event.title} 
                 fill 
-                className="object-cover"
+                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
              />
            </div>
+        ) : (
+          <div className="w-full aspect-video bg-zinc-200 rounded-2xl flex items-center justify-center text-[10px] font-black text-zinc-400 uppercase tracking-widest italic">
+            Visual_Missing
+          </div>
         )}
         
         {event.registrationLink ? (
@@ -72,14 +91,14 @@ export default function EventCard({ event }: { event: EventProps }) {
             href={event.registrationLink} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-black text-white py-2 px-4 rounded font-bold hover:bg-gray-800 transition"
+            className="w-full flex items-center justify-center gap-3 bg-black text-yellow-400 py-4 px-6 rounded-2xl font-[1000] uppercase text-[11px] tracking-[0.2em] hover:bg-yellow-400 hover:text-black transition-all active:scale-95 shadow-xl"
           >
-            Register <ExternalLink size={14}/>
+            Register Intel <ExternalLink size={14} strokeWidth={3} />
           </a>
         ) : (
-          <button disabled className="w-full bg-gray-300 text-gray-500 py-2 px-4 rounded font-bold cursor-not-allowed">
-            Closed
-          </button>
+          <div className="w-full flex items-center justify-center gap-3 bg-zinc-200 text-zinc-400 py-4 px-6 rounded-2xl font-[1000] uppercase text-[11px] tracking-[0.2em] cursor-not-allowed italic">
+            Access_Closed
+          </div>
         )}
       </div>
 
