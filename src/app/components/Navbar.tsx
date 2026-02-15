@@ -73,8 +73,8 @@ export default function Navbar() {
                   <button
                     className={`flex items-center gap-1 text-sm font-semibold transition-colors ${
                       active
-                        ? "text-blue-600"
-                        : "text-gray-600 hover:text-blue-600"
+                        ? "text-yellow-600"
+                        : "text-gray-600 hover:text-yellow-600"
                     }`}
                   >
                     {item.name}
@@ -92,8 +92,8 @@ export default function Navbar() {
                         href={child.href}
                         className={`block px-4 py-2.5 text-sm rounded-xl transition-colors ${
                           isActive(child.href)
-                            ? "bg-blue-50 text-blue-600 font-bold"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-blue-600"
+                            ? "bg-yellow-50 text-black font-bold"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-black"
                         }`}
                       >
                         {child.name}
@@ -110,8 +110,8 @@ export default function Navbar() {
                 href={item.href}
                 className={`px-4 py-2 text-sm font-semibold transition-colors rounded-full ${
                   active
-                    ? "text-blue-600 bg-blue-50/50"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    ? "text-black bg-yellow-400"
+                    : "text-gray-600 hover:text-black hover:bg-gray-50"
                 }`}
               >
                 {item.name}
@@ -125,7 +125,7 @@ export default function Navbar() {
           <div className="w-56">
             <SearchAutocomplete />
           </div>
-          <button className="bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-blue-600 transition-colors shadow-sm">
+          <button className="bg-yellow-400 text-black px-5 py-2.5 rounded-full text-sm font-bold hover:bg-black hover:text-yellow-400 transition-colors shadow-sm">
             Subscribe
           </button>
         </div>
@@ -187,7 +187,7 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   className={`block py-2 text-xl font-bold ${
-                    isActive(item.href) ? "text-blue-600" : "text-gray-900"
+                    isActive(item.href) ? "text-yellow-600" : "text-gray-900"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -201,7 +201,7 @@ export default function Navbar() {
             </div>
             
             <div className="pt-2">
-              <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-100">
+              <button className="w-full bg-yellow-400 text-black py-4 rounded-2xl font-bold shadow-lg shadow-yellow-100">
                 Get Started
               </button>
             </div>

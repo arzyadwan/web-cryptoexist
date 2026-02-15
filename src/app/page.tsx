@@ -9,7 +9,9 @@ import GlobalSidebar from "./components/GlobalSidebar";
 import TagChip from "./components/ui/TagChip";
 import { Post } from "@/types/sanity";
 import AdSpace from "./components/AdSpace";
-import CategorySection from "./components/CategorySection"; // <--- Import Component Baru
+import CategorySection from "./components/CategorySection";
+import NewsletterBanner from "./components/NewsletterBanner"; // <--- Import Newsletter
+import { ArrowRight } from "lucide-react"; // <--- Import Icon
 
 export const revalidate = 60; 
 
@@ -132,13 +134,13 @@ export default async function Home() {
             <section>
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-8 bg-black"></div>
+                  <div className="w-3 h-8 bg-yellow-400"></div>
                   <h2 className="text-2xl font-black text-black uppercase tracking-tight">Latest News</h2>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
                 {latestNewsPosts.map((post: Post) => (
-                  <article key={post._id} className="group flex flex-col h-full bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                  <article key={post._id} className="group flex flex-col h-full bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-yellow-400/50 transition-all duration-300">
                     <div className="relative h-48 w-full bg-gray-100 overflow-hidden">
                       {post.mainImage ? (
                         <Image src={urlFor(post.mainImage).url()} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -164,7 +166,18 @@ export default async function Home() {
                   </article>
                 ))}
               </div>
+              <div className="mt-8 flex justify-center">
+                 <Link 
+                    href="/news" 
+                    className="flex items-center gap-2 font-bold text-gray-900 border-2 border-gray-200 px-6 py-3 rounded-full hover:bg-yellow-400 hover:border-yellow-400 hover:text-black transition-all"
+                 >
+                    Lihat Semua Berita <ArrowRight size={18} />
+                 </Link>
+              </div>
             </section>
+
+            {/* Newsletter Banner */}
+            <NewsletterBanner />
 
             {/* ========== BAGIAN BARU: CATEGORY SLIDERS ========== */}
             

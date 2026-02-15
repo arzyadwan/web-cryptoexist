@@ -30,11 +30,25 @@
   /* 2. Konfigurasi Animasi */
   --animate-marquee: marquee 60s linear infinite;
 
-  /* 3. Konfigurasi Background Image */
-  /* Di v4, kita menggunakan CSS Variables konvensional untuk gradient */
+  /* 3. Color Palette - Yellow/Black Theme (Light Mode) */
+  --color-background: #ffffff;
+  --color-card: #ffffff;
+  --color-border: #e2e8f0; /* Slate-200 */
+  
+  --color-primary: #FACC15; /* Yellow-400 */
+  --color-primary-hover: #EAB308; /* Yellow-500 */
+  
+  --color-text-main: #0f172a; /* Slate-900 (Black-ish) */
+  --color-text-muted: #64748b; /* Slate-500 */
+
+  /* Legacy - tetap simpan jika ada yang pakai */
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
-  --color-crypto-dark: #0f172a;
-  --color-crypto-card: #1e293b;
-  --color-crypto-gold: #f59e0b;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-main);
+  }
 }

@@ -18,14 +18,14 @@ export default function CategorySection({ title, categorySlug, posts }: Props) {
       {/* Header Section */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-3 h-8 bg-blue-600"></div> {/* Warna beda dikit biar fresh */}
+          <div className="w-3 h-8 bg-yellow-400"></div> {/* Warna Yellow */}
           <h2 className="text-2xl font-black text-black uppercase tracking-tight">
             {title}
           </h2>
         </div>
         <Link 
             href={`/category/${categorySlug}`}
-            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-600 transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-yellow-600 transition-colors"
         >
             Lihat Semua <ArrowRight size={16} />
         </Link>
@@ -59,7 +59,7 @@ export default function CategorySection({ title, categorySlug, posts }: Props) {
                     <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">
                         {new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short'})}
                     </span>
-                    <h3 className="font-bold text-gray-900 leading-snug group-hover:text-blue-600 line-clamp-2">
+                    <h3 className="font-bold text-gray-900 leading-snug group-hover:text-yellow-600 line-clamp-2">
                         {post.title}
                     </h3>
                 </div>
@@ -73,10 +73,10 @@ export default function CategorySection({ title, categorySlug, posts }: Props) {
                 href={`/category/${categorySlug}`}
                 className="flex flex-col items-center gap-2 group p-4 text-center"
             >
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-yellow-400 group-hover:text-black transition-colors text-gray-400">
                     <ArrowRight size={20} />
                 </div>
-                <span className="text-xs font-bold text-gray-500 group-hover:text-blue-600">
+                <span className="text-xs font-bold text-gray-500 group-hover:text-yellow-600">
                     Berita {title} Lainnya
                 </span>
             </Link>

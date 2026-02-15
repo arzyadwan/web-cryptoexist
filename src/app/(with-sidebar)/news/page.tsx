@@ -4,6 +4,7 @@ import { client } from '@/lib/sanity'
 import { urlFor } from '@/lib/urlFor'
 import { Post } from '@/types/sanity'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import NewsCard from '@/app/components/NewsCard' // <--- Import NewsCard
 
 export const revalidate = 60
 
@@ -54,45 +55,10 @@ export default async function NewsArchive({ searchParams }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
         {posts.map((post: Post) => (
-          <article key={post._id} className="flex flex-col border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            {post.mainImage ? (
-              <div className="relative h-56 w-full bg-gray-100">
-                <Image
-                  src={urlFor(post.mainImage).url()}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ) : (
-              <div className="h-56 w-full bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
-            )}
-            
-            <div className="p-5 flex flex-col flex-grow">
-              <div className="mb-3">
-                {post.categories?.slice(0, 1).map((cat, idx) => (
-                   <span key={idx} className="text-xs font-bold text-blue-600 uppercase tracking-wide">
-                     {cat.title}
-                   </span>
-                ))}
-              </div>
-              
-              <h2 className="text-xl font-bold mb-3 hover:text-blue-600">
-                <Link href={`/news/${post.slug.current}`}>
-                  {post.title}
-                </Link>
-              </h2>
-              
-              <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-                {post.excerpt}
-              </p>
-              
-              <div className="flex items-center text-xs text-gray-500 border-t pt-4 mt-auto">
-                <span className="font-medium text-gray-900 mr-2">{post.author?.name}</span>
-                <span>• {new Date(post.publishedAt).toLocaleDateString()}</span>
-              </div>
-            </div>
-          </article>
+          // Menggunakan komponen NewsCard yang sudah diupdate agar konsisten
+          <div key={post._id}>
+             <NewsCard post={post} /> 
+          </div>
         ))}
       </div>
 
@@ -101,7 +67,7 @@ export default async function NewsArchive({ searchParams }: Props) {
         {currentPage > 1 && (
           <Link 
             href={`/news?page=${currentPage - 1}`}
-            className="flex items-center px-4 py-2 border rounded hover:bg-gray-50"
+            className="flex items-center px-4 py-2 border rounded hover:bg-gray-50 font-bold text-sm"
           >
             <ChevronLeft size={16} className="mr-2"/> Sebelumnya
           </Link>
@@ -110,7 +76,7 @@ export default async function NewsArchive({ searchParams }: Props) {
         {currentPage < totalPages && (
           <Link 
             href={`/news?page=${currentPage + 1}`}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="flex items-center px-4 py-2 bg-black text-white rounded hover:bg-gray-800 font-bold text-sm uppercase tracking-wide"
           >
             Selanjutnya <ChevronRight size={16} className="ml-2"/>
           </Link>

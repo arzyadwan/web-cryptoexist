@@ -2,19 +2,20 @@ import { Post } from '@/types/sanity'
 import SidebarTrending from './SidebarTrending'
 import SidebarMarketMini from './SidebarMarketMini'
 import SidebarNewsletter from './SidebarNewsLetter'
-import TagChip from './ui/TagChip' // Pastikan sudah ada komponen TagChip
-import SidebarAd from './SidebarAd' // <--- 1. Import Widget Iklan
-import AdSpace from './AdSpace' // <--- 2. Import Komponen AdSpace
+import TagChip from './ui/TagChip'
+import SidebarAd from './SidebarAd'
+import AdSpace from './AdSpace'
+import SidebarSocials from './SidebarSocials' // <--- Import Socials
 
 interface Props {
   trendingPosts: Post[]
-  editorsPick?: Post[] // Opsional
-  tags?: any[] // Opsional
+  editorsPick?: Post[]
+  tags?: any[]
 }
 
 export default function GlobalSidebar({ trendingPosts, editorsPick, tags }: Props) {
   return (
-    <aside className="space-y-8 h-full">
+    <aside className="space-y-6 h-full">
       
       {/* 🔴 PRIORITAS 1: Trending News (Traffic Driver) */}
       <SidebarTrending posts={trendingPosts} />
@@ -22,8 +23,10 @@ export default function GlobalSidebar({ trendingPosts, editorsPick, tags }: Prop
       {/* 🔴 PRIORITAS 1: Market Snapshot Mini (Utility) */}
       <SidebarMarketMini />
 
-      {/* 🔴 PRIORITAS 1: Newsletter (Asset) */}
+      {/* 🔴 PRIORITAS 1: Newsletter & Socials */}
       <SidebarNewsletter />
+      <SidebarSocials />
+
       <AdSpace position="sidebar" showPlaceholder={true} />
       <SidebarAd />
 
@@ -41,12 +44,12 @@ export default function GlobalSidebar({ trendingPosts, editorsPick, tags }: Prop
 
       {/* 🟡 PRIORITAS 2: Editor's Pick (Opsional/Kondisional) */}
       {editorsPick && editorsPick.length > 0 && (
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-           <h3 className="font-bold text-blue-800 text-xs uppercase tracking-widest mb-3">Editor&apos;s Choice</h3>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+           <h3 className="font-bold text-yellow-600 text-xs uppercase tracking-widest mb-3">Editor&apos;s Choice</h3>
            <div className="space-y-3">
               {editorsPick.map(post => (
                  <a key={post._id} href={`/news/${post.slug.current}`} className="block group">
-                    <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 leading-snug">
+                    <h4 className="text-sm font-bold text-gray-900 group-hover:text-yellow-600 leading-snug">
                        {post.title}
                     </h4>
                  </a>

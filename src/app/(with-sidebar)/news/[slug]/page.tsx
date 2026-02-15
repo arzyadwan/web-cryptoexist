@@ -10,8 +10,9 @@ import ShareButtons from "@/app/components/ShareButtons";
 import Breadcrumb from "@/app/components/ui/Breadcrumb";
 import TagChip from "@/app/components/ui/TagChip";
 import BookmarkButton from "@/app/components/BookmarkButton";
-import NewsCard from "@/app/components/NewsCard"; // Reuse komponen NewsCard
+import NewsCard from "@/app/components/NewsCard";
 import AdSpace from "@/app/components/AdSpace";
+import NewsletterBanner from "@/app/components/NewsletterBanner"; // <--- Import NewsLetterBanner
 
 export const revalidate = 60;
 
@@ -124,7 +125,7 @@ export default async function NewsDetail({ params }: Props) {
             <Link
               key={idx}
               href={`/category/${cat.slug?.current}`}
-              className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded uppercase tracking-wide hover:bg-blue-100"
+              className="text-xs font-black text-black bg-yellow-400 px-2 py-1 rounded-sm uppercase tracking-wide hover:bg-yellow-500 transition-colors shadow-sm"
             >
               {cat.title}
             </Link>
@@ -191,7 +192,7 @@ export default async function NewsDetail({ params }: Props) {
       {/* Iklan Sebelum Artikel */}
       <AdSpace position="in-article" />
       {/* 4. Article Body */}
-      <div className="prose prose-lg max-w-none prose-headings:font-black prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-blue-600 prose-a:font-bold prose-img:rounded-xl prose-blockquote:border-l-4 prose-blockquote:border-yellow-400 prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4">
+      <div className="prose prose-lg max-w-none prose-headings:font-black prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-yellow-600 prose-a:font-bold prose-img:rounded-xl prose-blockquote:border-l-4 prose-blockquote:border-yellow-400 prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:font-medium prose-blockquote:italic">
         <PortableText value={post.body} />
       </div>
       {/* Iklan Sebelum Artikel */}
@@ -225,7 +226,7 @@ export default async function NewsDetail({ params }: Props) {
               className="object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-2xl">
+            <div className="w-full h-full bg-yellow-400 flex items-center justify-center text-black font-black text-2xl">
               {post.author?.name.charAt(0)}
             </div>
           )}
@@ -241,32 +242,15 @@ export default async function NewsDetail({ params }: Props) {
           </p>
           <Link
             href={`/author/${post.author?.slug?.current}`}
-            className="text-xs font-bold text-blue-600 hover:text-blue-800 uppercase tracking-wide"
+            className="text-xs font-bold text-black border-b-2 border-yellow-400 hover:bg-yellow-400 transition-colors uppercase tracking-wide pb-0.5"
           >
             Lihat Artikel Lainnya →
           </Link>
         </div>
       </div>
 
-      {/* 7. Newsletter Inline (BARU - Retention) */}
-      <div className="mt-12 p-8 bg-yellow-400 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
-        <h3 className="text-2xl font-black text-black mb-2">
-          Jangan Ketinggalan Berita!
-        </h3>
-        <p className="text-black/80 font-medium mb-6">
-          Dapatkan ringkasan berita crypto harian langsung di inbox Anda.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-          <input
-            type="email"
-            placeholder="Email Anda"
-            className="flex-grow px-4 py-3 rounded border-2 border-black font-bold focus:outline-none"
-          />
-          <button className="bg-black text-white px-6 py-3 rounded font-black uppercase tracking-wider hover:bg-gray-800 transition">
-            Subscribe
-          </button>
-        </div>
-      </div>
+      {/* 7. Newsletter Inline (Diganti Component) */}
+      <NewsletterBanner />
 
       {/* 8. Related News (BARU) */}
       {relatedPosts.length > 0 && (

@@ -9,10 +9,12 @@ const COINS = [
 
 export default function SidebarMarketMini() {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-      <div className="bg-gray-50 px-4 py-3 border-b border-gray-100 flex justify-between items-center">
-        <h3 className="font-bold text-gray-900 text-xs uppercase tracking-widest">Market Pulse</h3>
-        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+    <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white px-4 py-4 border-b border-gray-100 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <h3 className="font-black text-black text-sm uppercase tracking-tight">Market Pulse</h3>
+        </div>
       </div>
       <div className="divide-y divide-gray-100">
         {COINS.map((coin) => (
@@ -28,8 +30,8 @@ export default function SidebarMarketMini() {
           </div>
         ))}
       </div>
-      <div className="bg-gray-50 p-2 text-center">
-         <a href="/market" className="text-[10px] font-bold text-blue-600 hover:underline">FULL DATA →</a>
+      <div className="bg-gray-50 p-2 text-center border-t border-gray-100">
+         <a href="/market" className="text-[10px] font-bold text-gray-500 hover:text-black hover:underline uppercase tracking-wider">Full Market Data →</a>
       </div>
     </div>
   )

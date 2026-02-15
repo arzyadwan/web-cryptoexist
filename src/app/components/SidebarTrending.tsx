@@ -16,16 +16,17 @@ export default function SidebarTrending({ posts = [] }: Props) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-      <div className="bg-black px-4 py-3">
-        <h3 className="font-bold text-white text-xs uppercase tracking-widest">Trending News</h3>
+    <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+      <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-100">
+        <div className="w-2 h-6 bg-yellow-400"></div>
+        <h3 className="font-black text-black text-sm uppercase tracking-tight">Trending News</h3>
       </div>
       <div className="divide-y divide-gray-100">
         
         {/* Sekarang aman karena posts dipastikan array */}
         {posts.map((post, idx) => (
-          <Link key={post._id} href={`/news/${post.slug.current}`} className="flex gap-3 p-4 hover:bg-yellow-50 transition group">
-            <span className="text-2xl font-black text-gray-200 group-hover:text-yellow-500 leading-none">
+          <Link key={post._id} href={`/news/${post.slug.current}`} className="flex gap-3 p-4 hover:bg-gray-50 transition group">
+            <span className="text-2xl font-black text-gray-200 group-hover:text-yellow-400 leading-none">
               {idx + 1}
             </span>
             <div>

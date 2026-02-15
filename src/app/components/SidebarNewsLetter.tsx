@@ -1,18 +1,18 @@
 export default function SidebarNewsletter() {
   return (
-    <div className="bg-yellow-400 p-6 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">
-      <h3 className="font-black text-black text-lg uppercase mb-2 leading-tight">Jangan Kudet!</h3>
-      <p className="text-xs text-black/80 font-bold mb-4">
+    <div className="bg-yellow-400 p-6 rounded-xl border border-yellow-500 text-center shadow-sm">
+      <h3 className="font-black text-black text-lg uppercase mb-2 leading-tight">Daily Alpha</h3>
+      <p className="text-xs text-black/80 font-medium mb-4 leading-relaxed">
         Dapat sinyal trading & berita insider setiap pagi.
       </p>
       <div className="space-y-2">
         <input 
           type="email" 
           placeholder="Email kamu..." 
-          className="w-full bg-white border border-black text-black px-3 py-2 rounded text-sm font-bold placeholder:text-gray-400 focus:outline-none" 
+          className="w-full bg-white/90 border-0 text-black px-4 py-3 rounded-lg text-sm font-medium placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-black" 
         />
-        <button className="w-full bg-black hover:bg-gray-800 text-white font-black py-2 rounded uppercase text-xs tracking-widest transition transform hover:-translate-y-0.5">
-            Join Free
+        <button className="w-full bg-black hover:bg-gray-900 text-white font-bold py-3 rounded-lg uppercase text-xs tracking-widest transition-transform active:scale-95">
+            Subscribe
         </button>
       </div>
     </div>

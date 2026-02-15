@@ -28,7 +28,7 @@ export default function NewsCard({ post, minimal = false }: Props) {
         {/* Category Badge Floating */}
         <div className="absolute top-3 left-3">
           {post.categories?.slice(0, 1).map((cat, idx) => (
-            <span key={idx} className="bg-blue-600/90 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm">
+            <span key={idx} className="bg-yellow-400 text-black text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider shadow-sm">
               {cat.title}
             </span>
           ))}
@@ -37,7 +37,7 @@ export default function NewsCard({ post, minimal = false }: Props) {
       
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <h2 className={`font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-snug mb-3 ${minimal ? 'text-base line-clamp-2' : 'text-xl line-clamp-2'}`}>
+        <h2 className={`font-bold text-gray-900 group-hover:text-yellow-600 transition-colors leading-snug mb-3 ${minimal ? 'text-base line-clamp-2' : 'text-xl line-clamp-2'}`}>
           <Link href={`/news/${post.slug.current}`}>
             {post.title}
           </Link>
