@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const navigation = [
     {
-      name: "Intelligence",
+      name: "News",
       href: "/news",
       type: "dropdown",
       children: [
@@ -32,8 +32,11 @@ export default function Navbar() {
         { name: "Regulation", href: "/category/regulation" },
       ],
     },
+    { name: "Market Outlook", href: "/market", type: "link" },
+    { name: "Education", href: "/education", type: "link" },
+    { name: "Career", href: "/career", type: "link" },
     { name: "Events", href: "/events", type: "link" },
-    { name: "Market", href: "/market", type: "link" },
+
     { name: "About Us", href: "/about", type: "link" },
   ];
 
