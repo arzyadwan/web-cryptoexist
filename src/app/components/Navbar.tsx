@@ -34,7 +34,7 @@ export default function Navbar() {
     },
     { name: "Events", href: "/events", type: "link" },
     { name: "Market", href: "/market", type: "link" },
-    { name: "Crypto Exist", href: "/about", type: "link" },
+    { name: "About Us", href: "/about", type: "link" },
   ];
 
   const isActive = (path: string) => pathname === path;
@@ -49,21 +49,16 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
         {/* === LOGO: High Contrast === */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="bg-yellow-400 p-1.5 rounded-lg ">
-              <div className="relative w-8 h-8">
-                <Image
-                  src="/icon.png"
-                  alt="Logo Icon"
-                  fill
-                  className="object-contain "
-                />
-              </div>
+            <div className="relative w-30 h-30">
+              <Image
+                src="/logo2.png"
+                alt="Logo Icon"
+                fill
+                className="object-contain "
+              />
             </div>
-            <span className="text-xl font-[1000] uppercase tracking-tighter text-black hidden lg:block">
-              CRYPTO<span className="text-yellow-500"> EXIST</span>
-            </span>
           </Link>
         </div>
 
